@@ -3,6 +3,7 @@ package com.vksk.Enotes_Api_Service.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,9 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<CategoryDto> findAllCategories() {
+	public List<CategoryDto> findNotDeletedCategories() {
 
-		List<Category> allCategories = repo.findAll();
+		List<Category> allCategories = repo.findByIsDeletedFalse();
 
 		List<CategoryDto> list = new ArrayList<CategoryDto>();
 		for (Category category : allCategories) {
@@ -57,11 +58,37 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public List<CategoryResponse> findByActiveCategory() {
-		List<Category> list = repo.findByIsActiveTrue();
+	public List<CategoryResponse> findByActiveAndNotDeletedCategory() {
+		List<Category> list = repo.findByIsActiveTrueAndIsDeletedFalse();
 
 		List<CategoryResponse> cResponses = list.stream().map(cat -> mapper.map(cat, CategoryResponse.class)).toList();
 		return cResponses;
+	}
+
+	@Override
+	public CategoryDto findByCategoryIdAndNotDeleted(int id) {
+
+		Optional<Category> optional = repo.findByIdAndIsDeletedFalse(id);
+
+		if (optional.isPresent()) {
+			return mapper.map(optional.get(), CategoryDto.class);
+		}
+
+		return null;
+	}
+
+	@Override
+	public boolean deleteById(int id) {
+		Optional<Category> optional = repo.findById(id);
+
+		if (optional.isPresent()) {
+			Category category = optional.get();
+			category.setIsDeleted(true);
+			repo.save(category);
+			return true;
+		}
+
+		return false;
 	}
 
 }
