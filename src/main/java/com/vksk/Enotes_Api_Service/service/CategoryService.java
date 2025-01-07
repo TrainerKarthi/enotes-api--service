@@ -2,12 +2,16 @@ package com.vksk.Enotes_Api_Service.service;
 
 import java.util.List;
 
+import com.vksk.Enotes_Api_Service.dto.CategoryDto;
+import com.vksk.Enotes_Api_Service.dto.CategoryResponse;
 import com.vksk.Enotes_Api_Service.entity.Category;
 
 public interface CategoryService {
 	
-	boolean saveCategory(Category category) ;
+	boolean saveCategory(CategoryDto categoryDto) ;
 	
-	List<Category> findAllCategories();
+	List<CategoryDto> findAllCategories();
+
+	List<CategoryResponse> findByActiveCategory();
 
 }
