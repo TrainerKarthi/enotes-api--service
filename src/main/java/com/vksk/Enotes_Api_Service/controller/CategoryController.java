@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vksk.Enotes_Api_Service.dto.CategoryDto;
 import com.vksk.Enotes_Api_Service.dto.CategoryResponse;
+import com.vksk.Enotes_Api_Service.exceptions.ResourceNotFoundException;
 import com.vksk.Enotes_Api_Service.service.CategoryService;
 
 @RestController
@@ -57,12 +58,13 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> fetchById(@PathVariable int id) {
+	public ResponseEntity<?> fetchById(@PathVariable int id) throws ResourceNotFoundException {
 
 		CategoryDto dto = service.findByCategoryIdAndNotDeleted(id);
 
 		if (ObjectUtils.isEmpty(dto)) {
-			return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
+//			return new ResponseEntity<>("Object not found", HttpStatus.NOT_FOUND);
+			throw new ResourceNotFoundException("Resource Not Found for id "+id);
 		}
 		return new ResponseEntity<>(dto, HttpStatus.OK);
 	}
