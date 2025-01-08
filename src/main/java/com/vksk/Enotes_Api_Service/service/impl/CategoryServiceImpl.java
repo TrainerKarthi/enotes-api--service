@@ -15,6 +15,7 @@ import com.vksk.Enotes_Api_Service.dto.CategoryResponse;
 import com.vksk.Enotes_Api_Service.entity.Category;
 import com.vksk.Enotes_Api_Service.repository.CategoryRepository;
 import com.vksk.Enotes_Api_Service.service.CategoryService;
+import com.vksk.Enotes_Api_Service.utils.Validation;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -24,6 +25,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private ModelMapper mapper;
+	
+	@Autowired
+	private Validation validation;
 
 	@Override
 	public boolean saveCategory(CategoryDto categoryDto) {
@@ -33,6 +37,9 @@ public class CategoryServiceImpl implements CategoryService {
 //		category.setDescription(categoryDto.getDescription());
 //		category.setIsActive(categoryDto.getIsActive());
 
+//		Validating CategoryDto
+		validation.categoryValidation(categoryDto);
+		
 		Category category = mapper.map(categoryDto, Category.class);
 		if (ObjectUtils.isEmpty(category.getId())) {
 
