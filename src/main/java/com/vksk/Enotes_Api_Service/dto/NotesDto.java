@@ -13,14 +13,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class CategoryDto {
-	private Integer id;
+public class NotesDto {
 
-	private String name;
+	private int id;
+
+	private String title;
 
 	private String description;
 
-	private Boolean isActive;
+	private CategoryDto category;
 
 	private Integer createdBy;
 
@@ -30,4 +31,14 @@ public class CategoryDto {
 
 	private Date updatedOn;
 
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@ToString
+	private static class CategoryDto {
+		private int id;
+
+		private String name;
+	}
 }
